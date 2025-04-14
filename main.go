@@ -10,7 +10,7 @@ import (
 )
 
 func uploadHandler(w http.ResponseWriter, r *http.Request) {
-	// Allow CORS (useful for frontend testing)
+	// Allow CORS (useful for frontend tesating)
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Content-Type", "application/json")
 
