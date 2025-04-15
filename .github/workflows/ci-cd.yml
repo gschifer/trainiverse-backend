@@ -28,8 +28,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-
 
+      - name: Install golangci-lint
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.56.2
+
+      - name: Run golangci-lint
+        run: golangci-lint run ./...
+
       - name: Install dependencies
         run: go mod download
 
-      - name: Build
-        run: go build -v ./...
+      - name: Build project
+        run: go build -o output/main ./...
