@@ -39,4 +39,4 @@ jobs:
         run: go mod download
 
       - name: Build project
-        run: go build -o output/main ./...
+        run: go build -o output/main .
