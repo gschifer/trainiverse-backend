@@ -30,7 +30,12 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 		utils.HandleError(w, "Error retrieving the file", http.StatusBadRequest)
 		return
 	}
-	defer file.Close()
+
+	defer func() {
+		if err := file.Close(); err != nil {
+			utils.HandleError(w, "Failed to close the file", http.StatusInternalServerError)
+		}
+	}()
 
 	// Decode EXIF metadata
 	x, err := exif.Decode(file)
@@ -57,5 +62,7 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Return JSON response
-	json.NewEncoder(w).Encode(response)
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		utils.HandleError(w, "Failed to encode JSON response", http.StatusInternalServerError)
+	}
 }
