@@ -8,7 +8,8 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/upload", handlers.UploadHandler)
+	http.HandleFunc("/checkin", handlers.CheckinHandler)
+	http.HandleFunc("/checkout", handlers.CheckinHandler)
 
 	port := os.Getenv("PORT")
 	if port == "" {
