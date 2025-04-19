@@ -21,7 +21,7 @@ func IsToday(t time.Time) bool {
 }
 
 func SaveImage(file multipart.File, originalName, folder, userID string) error {
-	timestamp := time.Now().Format("20060102_150405")
+	timestamp := time.Now().Format(time.RFC3339)
 	filename := fmt.Sprintf("%s_%s%s", userID, timestamp, filepath.Ext(originalName))
 	outPath := filepath.Join("storage", folder, filename)
 

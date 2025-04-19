@@ -2,8 +2,11 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
+	"os"
+	"path/filepath"
 	"time"
 	"trainiverse-backend/utils"
 
@@ -51,14 +54,17 @@ func CheckoutHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userID := "123"
+	userID := r.Header.Get("UserID")
 	start, ok := checkinTimes[userID]
 	if !ok {
 		http.Error(w, `{"error":"no check-in found"}`, http.StatusBadRequest)
 		return
 	}
 
-	if timestamp.Sub(start) < 20*time.Minute {
+	data, _ := LoadCheckinLog(filepath.Join("output/checkins/123123_20250418_232007.json"))
+	parsedTime, _ := time.Parse(time.RFC3339, data.PhotoMetadataTime)
+
+	if timestamp.Sub(parsedTime) < 20*time.Minute {
 		http.Error(w, `{"error":"must wait at least 20 minutes before checkout"}`, http.StatusBadRequest)
 		return
 	}
@@ -79,4 +85,25 @@ func CheckoutHandler(w http.ResponseWriter, r *http.Request) {
 		"checkout_at": timestamp,
 		"duration":    timestamp.Sub(start).String(),
 	})
+}
+
+type CheckinLog struct {
+	UserID            string `json:"userId"`
+	CheckinDate       string `json:"checkinDate"`
+	PhotoMetadataTime string `json:"photoTimestamp"`
+}
+
+// LoadCheckinLog loads and parses a check-in log JSON file from disk.
+func LoadCheckinLog(filePath string) (*CheckinLog, error) {
+	data, err := os.ReadFile(filePath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read file: %w", err)
+	}
+
+	var log CheckinLog
+	if err := json.Unmarshal(data, &log); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal JSON: %w", err)
+	}
+
+	return &log, nil
 }
