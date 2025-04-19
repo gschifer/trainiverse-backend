@@ -4,12 +4,15 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"trainiverse-backend/firebase"
 	"trainiverse-backend/handlers"
 )
 
 func main() {
-	http.HandleFunc("/checkin", handlers.CheckinHandler)
-	http.HandleFunc("/checkout", handlers.CheckoutHandler)
+	firebase.StartFirebase()
+
+	http.HandleFunc("/checkin", firebase.FirebaseAuthMiddleware(handlers.CheckinHandler))
+	http.HandleFunc("/checkout", firebase.FirebaseAuthMiddleware(handlers.CheckoutHandler))
 
 	port := os.Getenv("PORT")
 	if port == "" {
