@@ -2,13 +2,22 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
+	"os"
+	"path/filepath"
 	"time"
 	"trainiverse-backend/utils"
 
 	"github.com/rwcarlsen/goexif/exif"
 )
+
+type CheckinData struct {
+	UserID         string    `json:"userID"`
+	CheckinDate    time.Time `json:"checkinDate"`
+	PhotoTimestamp time.Time `json:"photoTimestamp"`
+}
 
 var checkinTimes = make(map[string]time.Time)
 
@@ -74,10 +83,42 @@ func CheckinHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Save JSON
+	checkinInfo := CheckinData{
+		UserID:         userID,
+		CheckinDate:    time.Now(),
+		PhotoTimestamp: timestamp,
+	}
+
+	if err := saveCheckinJSON(checkinInfo); err != nil {
+		http.Error(w, `{"error":"failed to save checkin json"}`, http.StatusInternalServerError)
+		return
+	}
+
 	checkinTimes[userID] = timestamp
 
 	_ = json.NewEncoder(w).Encode(map[string]any{
 		"message":   "Check-in saved successfully",
 		"timestamp": timestamp,
 	})
+}
+
+func saveCheckinJSON(data CheckinData) error {
+	dir := "output/checkins"
+	if err := os.MkdirAll(dir, os.ModePerm); err != nil {
+		return fmt.Errorf("failed to create output directory: %w", err)
+	}
+
+	filename := fmt.Sprintf("%s_%s.json", data.UserID, data.CheckinDate.Format("20060102_150405"))
+	path := filepath.Join(dir, filename)
+
+	f, err := os.Create(path)
+	if err != nil {
+		return fmt.Errorf("failed to create JSON file: %w", err)
+	}
+	defer f.Close()
+
+	encoder := json.NewEncoder(f)
+	encoder.SetIndent("", "  ")
+	return encoder.Encode(data)
 }
