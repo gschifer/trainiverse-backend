@@ -9,7 +9,7 @@ import (
 
 func main() {
 	http.HandleFunc("/checkin", handlers.CheckinHandler)
-	http.HandleFunc("/checkout", handlers.CheckinHandler)
+	http.HandleFunc("/checkout", handlers.CheckoutHandler)
 
 	port := os.Getenv("PORT")
 	if port == "" {
