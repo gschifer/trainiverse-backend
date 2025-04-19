@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"time"
+	"trainiverse-backend/firebase"
 	"trainiverse-backend/utils"
 
 	"github.com/rwcarlsen/goexif/exif"
@@ -15,7 +16,7 @@ import (
 
 type CheckinData struct {
 	UserID         string    `json:"userID"`
-	CheckinDate    time.Time `json:"checkinDate"`
+	CheckinDate    time.Time `json:"checkinDate"` 	
 	PhotoTimestamp time.Time `json:"photoTimestamp"`
 }
 
@@ -24,6 +25,12 @@ var checkinTimes = make(map[string]time.Time)
 func CheckinHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Content-Type", "application/json")
+
+	userID := firebase.GetUserID(r)
+	if userID == "" {
+		http.Error(w, `{"error":"userID not found"}`, http.StatusUnauthorized)
+		return
+	}
 
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -50,12 +57,6 @@ func CheckinHandler(w http.ResponseWriter, r *http.Request) {
 	x, err := exif.Decode(file)
 	if err != nil {
 		http.Error(w, `{"error":"could not read EXIF"}`, http.StatusInternalServerError)
-		return
-	}
-
-	userID := r.Header.Get("UserID")
-	if userID == "" {
-		http.Error(w, "User ID is required", http.StatusBadRequest)
 		return
 	}
 
@@ -90,6 +91,7 @@ func CheckinHandler(w http.ResponseWriter, r *http.Request) {
 		PhotoTimestamp: timestamp,
 	}
 
+	// TODO will remove this and replace to save at postgres
 	if err := saveCheckinJSON(checkinInfo); err != nil {
 		http.Error(w, `{"error":"failed to save checkin json"}`, http.StatusInternalServerError)
 		return
@@ -103,6 +105,7 @@ func CheckinHandler(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// TODO This should be removed
 func saveCheckinJSON(data CheckinData) error {
 	dir := "output/checkins"
 	if err := os.MkdirAll(dir, os.ModePerm); err != nil {
