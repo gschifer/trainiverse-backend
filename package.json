@@ -1,0 +1,26 @@
+{
+  "name": "trainiverse-backend",
+  "version": "1.0.0",
+  "main": "commitlint.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gschifer/trainiverse-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gschifer/trainiverse-backend/issues"
+  },
+  "homepage": "https://github.com/gschifer/trainiverse-backend#readme",
+  "description": "",
+  "devDependencies": {
+    "@commitlint/cli": "^17.8.1",
+    "@commitlint/config-conventional": "^17.8.1",
+    "husky": "^8.0.3"
+  }
+}
