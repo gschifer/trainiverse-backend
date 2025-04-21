@@ -1,3 +1,10 @@
+# [1.0.0-beta.2](https://github.com/gschifer/trainiverse-backend/compare/v1.0.0-beta.1...v1.0.0-beta.2) (2025-04-21)
+
+
+### Bug Fixes
+
+* ensure commitlint runs only on pull request events ([#23](https://github.com/gschifer/trainiverse-backend/issues/23)) ([916905b](https://github.com/gschifer/trainiverse-backend/commit/916905b7a40bacf3ccae124bc24baf183b111848))
+
 # 1.0.0-beta.1 (2025-04-21)
 
 
