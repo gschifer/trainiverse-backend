@@ -1,0 +1,24 @@
+name: PR Title Lint
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+jobs:
+  lint-pr-title:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: amannn/action-semantic-pull-request@v5
+        with:
+          subjectPattern: '^\[GITISSUE-\d+\] .+'
+          subjectPatternError: 'PR title must follows this example: fix: [GITISSUE-123] solve bug in feature xyz, feat: [GITISSUE-123] add feature xyz'
+          types: |
+            feat
+            fix
+            chore
+            docs
+            style
+            refactor
+            test
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
