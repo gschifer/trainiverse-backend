@@ -46,6 +46,24 @@ jobs:
       - name: Build project
         run: go build -o output/main .
 
+  commitlint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Commitlint
+        run: npx commitlint --from=$GITHUB_BASE_REF --to=HEAD
+
   semantic-release:
     name: Semantic Release
     runs-on: ubuntu-latest
@@ -65,7 +83,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 20
 
       - name: Install dependencies
         run: npm install -g semantic-release @semantic-release/changelog @semantic-release/git @semantic-release/github
