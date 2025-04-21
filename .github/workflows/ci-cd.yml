@@ -48,6 +48,7 @@ jobs:
         run: go build -o output/main .
 
   commitlint:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
 
     steps:
