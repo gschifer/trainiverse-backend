@@ -1,4 +1,4 @@
 firebase/serviceAccountKey.json
 .env
-*storage
+storage/
 node_modules/

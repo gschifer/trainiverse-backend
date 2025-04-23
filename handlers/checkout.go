@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"time"
+	"trainiverse-backend/firebase"
 	"trainiverse-backend/utils"
 
 	"github.com/rwcarlsen/goexif/exif"
@@ -54,14 +55,15 @@ func CheckoutHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userID := r.Header.Get("UserID")
+	userID := firebase.GetUserID(r)
 	start, ok := checkinTimes[userID]
 	if !ok {
 		http.Error(w, `{"error":"no check-in found"}`, http.StatusBadRequest)
 		return
 	}
 
-	data, _ := LoadCheckinLog(filepath.Join("output/checkins/123123_20250418_232007.json"))
+	// TODO Check in the DB the path of the check-in for the user to compare the times
+	data, _ := LoadCheckinLog(filepath.Join("storage/checkins/%s.json"))
 	parsedTime, _ := time.Parse(time.RFC3339, data.PhotoMetadataTime)
 
 	if timestamp.Sub(parsedTime) < 20*time.Minute {

@@ -5,21 +5,16 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"os"
-	"path/filepath"
 	"time"
+	"trainiverse-backend/database"
 	"trainiverse-backend/firebase"
+	"trainiverse-backend/models"
 	"trainiverse-backend/utils"
 
 	"github.com/rwcarlsen/goexif/exif"
 )
 
-type CheckinData struct {
-	UserID         string    `json:"userID"`
-	CheckinDate    time.Time `json:"checkinDate"` 	
-	PhotoTimestamp time.Time `json:"photoTimestamp"`
-}
-
+// TODO this will be removed to use a database
 var checkinTimes = make(map[string]time.Time)
 
 func CheckinHandler(w http.ResponseWriter, r *http.Request) {
@@ -60,6 +55,12 @@ func CheckinHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	timestamp, err := utils.ExtractTime(x)
+	if err != nil || !utils.IsToday(timestamp) {
+		http.Error(w, `{"error":"photo must be from today"}`, http.StatusBadRequest)
+		return
+	}
+
 	// Check if the user has already checked in today
 	lastCheckInTime, exists := checkinTimes[userID]
 	if exists && lastCheckInTime.YearDay() == time.Now().YearDay() {
@@ -67,11 +68,6 @@ func CheckinHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	timestamp, err := utils.ExtractTime(x)
-	if err != nil || !utils.IsToday(timestamp) {
-		http.Error(w, `{"error":"photo must be from today"}`, http.StatusBadRequest)
-		return
-	}
 
 	if _, err := file.Seek(0, io.SeekStart); err != nil {
 		http.Error(w, `{"error":"failed to reset file pointer"}`, http.StatusInternalServerError)
@@ -84,16 +80,14 @@ func CheckinHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Save JSON
-	checkinInfo := CheckinData{
+	checkinInfo := models.CheckinData{
 		UserID:         userID,
 		CheckinDate:    time.Now(),
 		PhotoTimestamp: timestamp,
 	}
 
-	// TODO will remove this and replace to save at postgres
-	if err := saveCheckinJSON(checkinInfo); err != nil {
-		http.Error(w, `{"error":"failed to save checkin json"}`, http.StatusInternalServerError)
+	if err := saveCheckinToDB(checkinInfo); err != nil {
+		http.Error(w, `{"error":"failed to save checkin to database"}`, http.StatusInternalServerError)
 		return
 	}
 
@@ -105,23 +99,23 @@ func CheckinHandler(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// TODO This should be removed
-func saveCheckinJSON(data CheckinData) error {
-	dir := "output/checkins"
-	if err := os.MkdirAll(dir, os.ModePerm); err != nil {
-		return fmt.Errorf("failed to create output directory: %w", err)
-	}
+func saveCheckinToDB(data models.CheckinData) error {
+	// Prepare the SQL query
+	query := `
+		INSERT INTO checkins (user_id, image_path, checkin_date)
+		VALUES ($1, $2, $3)
+		RETURNING id;
+	`
 
-	filename := fmt.Sprintf("%s_%s.json", data.UserID, data.CheckinDate.Format("20060102_150405"))
-	path := filepath.Join(dir, filename)
+	// Get the image path where the image was saved
+	imagePath := fmt.Sprintf("checkins/%s_%s.jpg", data.UserID, time.Now().Format("20060102_150405"))
 
-	f, err := os.Create(path)
+	var id int
+	err := database.DB.QueryRow(query, data.UserID, imagePath, data.CheckinDate).Scan(&id)
 	if err != nil {
-		return fmt.Errorf("failed to create JSON file: %w", err)
+		return fmt.Errorf("failed to insert checkin data into DB: %w", err)
 	}
-	defer f.Close()
 
-	encoder := json.NewEncoder(f)
-	encoder.SetIndent("", "  ")
-	return encoder.Encode(data)
+	fmt.Printf("Check-in saved with ID %d\n", id)
+	return nil
 }

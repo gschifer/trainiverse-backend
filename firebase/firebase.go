@@ -13,6 +13,7 @@ import (
 var AuthClient *auth.Client
 
 type contextKey string
+
 var keyForUserIds = contextKey("userID")
 
 func StartFirebase() {
@@ -51,7 +52,7 @@ func FirebaseAuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 
 
 func GetUserID(r *http.Request) string {
-	userID, _ := r.Context().Value("userID").(string)
+	userID, _ := r.Context().Value(keyForUserIds).(string)
 	return userID
 }
 
