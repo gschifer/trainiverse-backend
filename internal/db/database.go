@@ -14,6 +14,17 @@ import (
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
+type DBInterface interface {
+	Query(query string, args ...any) (*sql.Rows, error)
+	QueryRow(query string, args ...any) *sql.Row
+	Exec(query string, args ...any) (sql.Result, error)
+	Prepare(query string) (*sql.Stmt, error)
+}
+
+func GetDB() DBInterface {
+	return DB
+}
+
 var DB *sql.DB
 
 func InitDatabase() {

@@ -10,11 +10,21 @@ import (
 	"google.golang.org/api/option"
 )
 
-var AuthClient *auth.Client
+type FirebaseInterface interface {
+	GetUserID(r *http.Request) string
+}
+
+type Authenticator interface {
+	VerifyIDToken(ctx context.Context, idToken string) (*auth.Token, error)
+}
+
+type FirebaseClient struct{}
+
+var Auth Authenticator
 
 type contextKey string
 
-var keyForUserIds = contextKey("userID")
+var keyForUserIDs = contextKey("userID")
 
 func StartFirebase() {
 	opt := option.WithCredentialsFile("../internal/firebase/serviceAccountKey.json")
@@ -24,10 +34,12 @@ func StartFirebase() {
 		panic("could not start firebase: " + err.Error())
 	}
 
-	AuthClient, err = app.Auth(context.Background())
+	client, err := app.Auth(context.Background())
 	if err != nil {
 		panic("could not initialize firebase auth client: " + err.Error())
 	}
+
+	Auth = client
 }
 
 func FirebaseAuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
@@ -39,20 +51,18 @@ func FirebaseAuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		}
 
 		idToken := strings.TrimPrefix(authHeader, "Bearer ")
-		token, err := AuthClient.VerifyIDToken(r.Context(), idToken)
+		token, err := Auth.VerifyIDToken(r.Context(), idToken)
 		if err != nil {
 			http.Error(w, `{"error":"invalid token"}`, http.StatusUnauthorized)
 			return
 		}
 
-		ctx := context.WithValue(r.Context(), keyForUserIds, token.UID)
+		ctx := context.WithValue(r.Context(), keyForUserIDs, token.UID)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	}
 }
 
-
-func GetUserID(r *http.Request) string {
-	userID, _ := r.Context().Value(keyForUserIds).(string)
+func (firebaseService FirebaseClient) GetUserID(r *http.Request) string {
+	userID, _ := r.Context().Value(keyForUserIDs).(string)
 	return userID
 }
-

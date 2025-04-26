@@ -18,11 +18,13 @@ import (
 
 type CheckoutService struct {
 	checkinRepo interfaces.CheckinInterface
+	firebaseService firebase.FirebaseInterface
 }
 
 func NewCheckoutService(checkinRepo interfaces.CheckinInterface) *CheckoutService {
 	return &CheckoutService{
 		checkinRepo: checkinRepo,
+		firebaseService: &firebase.FirebaseClient{},
 	}
 }
 
@@ -69,19 +71,13 @@ func (service *CheckoutService) CheckoutHandler(w http.ResponseWriter, r *http.R
 		return
 	}
 
-	userID := firebase.GetUserID(r)
+	userID := service.firebaseService.GetUserID(r)
 	ok, err := service.checkinRepo.HasCheckedInToday(userID)
 	if err != nil {
 		http.Error(w, `{"error":"failed to check in the database"}`, http.StatusInternalServerError)
 	}
 	if !ok {
 		http.Error(w, `{"error":"user has not checked in today"}`, http.StatusBadRequest)
-	}
-
-	start, ok := checkinTimes[userID]
-	if !ok {
-		http.Error(w, `{"error":"no check-in found"}`, http.StatusBadRequest)
-		return
 	}
 
 	// TODO Check in the DB the path of the check-in for the user to compare the times
@@ -104,10 +100,10 @@ func (service *CheckoutService) CheckoutHandler(w http.ResponseWriter, r *http.R
 	}
 
 	_ = json.NewEncoder(w).Encode(map[string]any{
-		"message": "Check-out saved successfully",
-		"checkin_at":  start,
+		"message":     "Check-out saved successfully",
+		// "checkin_at":  start,
 		"checkout_at": timestamp,
-		"duration":    timestamp.Sub(start).String(),
+		// "duration":    timestamp.Sub(start).String(),
 	})
 }
 

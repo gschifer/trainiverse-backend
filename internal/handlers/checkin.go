@@ -2,12 +2,11 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 	"time"
-	"trainiverse-backend/internal/db"
 	"trainiverse-backend/internal/firebase"
+	"trainiverse-backend/internal/interfaces"
 	"trainiverse-backend/internal/models"
 
 	"trainiverse-backend/internal/utils"
@@ -15,14 +14,24 @@ import (
 	"github.com/rwcarlsen/goexif/exif"
 )
 
-// TODO this will be removed to use a database
-var checkinTimes = make(map[string]time.Time)
 
-func CheckinHandler(w http.ResponseWriter, r *http.Request) {
+type CheckinService struct {
+	checkinRepo interfaces.CheckinInterface
+	FirebaseClient firebase.FirebaseInterface
+}
+
+func NewCheckinService(checkinRepo interfaces.CheckinInterface) *CheckinService {
+	return &CheckinService{
+		checkinRepo: checkinRepo,
+		FirebaseClient: &firebase.FirebaseClient{},
+	}
+}
+
+func (service CheckinService) CheckinHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Content-Type", "application/json")
 
-	userID := firebase.GetUserID(r)
+	userID := service.FirebaseClient.GetUserID(r)
 	if userID == "" {
 		http.Error(w, `{"error":"userID not found"}`, http.StatusUnauthorized)
 		return
@@ -64,13 +73,15 @@ func CheckinHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Check if the user has already checked in today
-	lastCheckInTime, exists := checkinTimes[userID]
-	if exists && lastCheckInTime.YearDay() == time.Now().YearDay() {
-		http.Error(w, "User has already checked in today", http.StatusConflict)
+	ok, err := service.checkinRepo.HasCheckedInToday(userID)
+	if err != nil {
+		http.Error(w, `{"error":"failed to check in the database"}`, http.StatusInternalServerError)
 		return
 	}
-
+	if ok {
+		http.Error(w, `{"error":"user has already checked in today"}`, http.StatusConflict)
+		return
+	}
 
 	if _, err := file.Seek(0, io.SeekStart); err != nil {
 		http.Error(w, `{"error":"failed to reset file pointer"}`, http.StatusInternalServerError)
@@ -89,36 +100,14 @@ func CheckinHandler(w http.ResponseWriter, r *http.Request) {
 		PhotoTimestamp: timestamp,
 	}
 
-	if err := saveCheckinToDB(checkinInfo); err != nil {
+	if err := service.checkinRepo.SaveCheckinToDB(checkinInfo); err != nil {
 		http.Error(w, `{"error":"failed to save checkin to database"}`, http.StatusInternalServerError)
 		return
 	}
 
-	checkinTimes[userID] = timestamp
 
 	_ = json.NewEncoder(w).Encode(map[string]any{
 		"message":   "Check-in saved successfully",
-		"timestamp": timestamp,
+		// "timestamp": timestamp,
 	})
-}
-
-func saveCheckinToDB(data models.CheckinData) error {
-	// Prepare the SQL query
-	query := `
-		INSERT INTO checkins (user_id, image_path, checkin_date)
-		VALUES ($1, $2, $3)
-		RETURNING id;
-	`
-
-	// Get the image path where the image was saved
-	imagePath := fmt.Sprintf("checkins/%s_%s.jpg", data.UserID, time.Now().Format("20060102_150405"))
-
-	var id int
-	err := database.DB.QueryRow(query, data.UserID, imagePath, data.CheckinDate).Scan(&id)
-	if err != nil {
-		return fmt.Errorf("failed to insert checkin data into DB: %w", err)
-	}
-
-	fmt.Printf("Check-in saved with ID %d\n", id)
-	return nil
 }

@@ -1,6 +1,8 @@
 package interfaces
 
+import "trainiverse-backend/internal/models"
+
 type CheckinInterface interface {
 	HasCheckedInToday(userID string) (bool, error)
-	// SaveCheckin(userID string, checkinDate string, photoTimestamp string) error
+	SaveCheckinToDB(data models.CheckinData) error
 }

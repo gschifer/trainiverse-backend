@@ -12,14 +12,14 @@ import (
 
 func main() {
 	firebase.StartFirebase()
-
 	database.InitDatabase()
 
 	checkInRepo := repository.NewCheckinRepo(database.DB)
-	checkInService := handlers.NewCheckoutService(checkInRepo)
+	checkout := handlers.NewCheckoutService(checkInRepo)
+	checkin := handlers.NewCheckinService(checkInRepo)
 
-	http.HandleFunc("/checkin", firebase.FirebaseAuthMiddleware(handlers.CheckinHandler))
-	http.HandleFunc("/checkout", firebase.FirebaseAuthMiddleware(checkInService.CheckoutHandler))
+	http.HandleFunc("/checkin", firebase.FirebaseAuthMiddleware(checkin.CheckinHandler))
+	http.HandleFunc("/checkout", firebase.FirebaseAuthMiddleware(checkout.CheckoutHandler))
 
 	port := os.Getenv("PORT")
 	if port == "" {
