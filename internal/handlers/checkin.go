@@ -14,15 +14,14 @@ import (
 	"github.com/rwcarlsen/goexif/exif"
 )
 
-
 type CheckinService struct {
-	checkinRepo interfaces.CheckinInterface
+	checkinRepo    interfaces.CheckinInterface
 	FirebaseClient firebase.FirebaseInterface
 }
 
 func NewCheckinService(checkinRepo interfaces.CheckinInterface) *CheckinService {
 	return &CheckinService{
-		checkinRepo: checkinRepo,
+		checkinRepo:    checkinRepo,
 		FirebaseClient: &firebase.FirebaseClient{},
 	}
 }
@@ -105,9 +104,9 @@ func (service CheckinService) CheckinHandler(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-
+	w.WriteHeader(http.StatusCreated)
 	_ = json.NewEncoder(w).Encode(map[string]any{
-		"message":   "Check-in saved successfully",
+		"message": "Check-in saved successfully",
 		// "timestamp": timestamp,
 	})
 }

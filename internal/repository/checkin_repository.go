@@ -3,9 +3,9 @@ package repository
 import (
 	"database/sql"
 	"fmt"
-	"time"
 	"trainiverse-backend/internal/interfaces"
 	"trainiverse-backend/internal/models"
+	"trainiverse-backend/internal/utils"
 )
 
 type CheckinRepository struct {
@@ -41,7 +41,7 @@ func (checkinRepo *CheckinRepository) SaveCheckinToDB(data models.CheckinData) e
 	`
 
 	// Get the image path where the image was saved
-	imagePath := fmt.Sprintf("checkins/%s_%s.jpg", data.UserID, time.Now().Format("20060102_150405"))
+	imagePath := utils.BuildImagePath(data.UserID)
 
 	var id int
 	err := checkinRepo.DB.QueryRow(query, data.UserID, imagePath, data.CheckinDate).Scan(&id)
