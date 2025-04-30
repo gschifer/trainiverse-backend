@@ -1,11 +1,11 @@
 all: false
-dir: '{{.InterfaceDir}}/mocks' # Place mocks in a "mocks" subdirectory
-filename: "mock_{{.InterfaceName}}.go" # Generate files like "mock_firebaseinterface.go"
+dir: '{{.InterfaceDir}}/mocks'
+filename: "mock_{{.InterfaceName}}.go" 
 force-file-write: false
 formatter: goimports
 log-level: info
-structname: "Mock{{.InterfaceName}}" # Struct names like "MockFirebaseInterface"
-pkgname: "mocks" # Use "mocks" as the package name for all generated mocks
+structname: "Mock{{.InterfaceName}}"
+pkgname: "mocks"
 recursive: false
 template: testify
 
@@ -19,3 +19,6 @@ packages:
     trainiverse-backend/internal/firebase:
         interfaces:
             FirebaseInterface:
+    trainiverse-backend/internal/utils:
+        interfaces:
+            ExifDecoderInterface:

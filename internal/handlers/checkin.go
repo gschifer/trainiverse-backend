@@ -4,25 +4,24 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
-	"time"
 	"trainiverse-backend/internal/firebase"
 	"trainiverse-backend/internal/interfaces"
 	"trainiverse-backend/internal/models"
 
 	"trainiverse-backend/internal/utils"
-
-	"github.com/rwcarlsen/goexif/exif"
 )
 
 type CheckinService struct {
 	checkinRepo    interfaces.CheckinInterface
 	FirebaseClient firebase.FirebaseInterface
+	ExifDecoder    utils.ExifDecoderInterface
 }
 
-func NewCheckinService(checkinRepo interfaces.CheckinInterface) *CheckinService {
+func NewCheckinService(checkinRepo interfaces.CheckinInterface, exifDecoder utils.ExifDecoderInterface) *CheckinService {
 	return &CheckinService{
 		checkinRepo:    checkinRepo,
 		FirebaseClient: &firebase.FirebaseClient{},
+		ExifDecoder:    exifDecoder,
 	}
 }
 
@@ -58,7 +57,7 @@ func (service CheckinService) CheckinHandler(w http.ResponseWriter, r *http.Requ
 		}
 	}()
 
-	x, err := exif.Decode(file)
+	x, err := service.ExifDecoder.Decode(file)
 	if err != nil {
 		http.Error(w, `{"error":"could not read EXIF"}`, http.StatusInternalServerError)
 		return
@@ -94,9 +93,8 @@ func (service CheckinService) CheckinHandler(w http.ResponseWriter, r *http.Requ
 	}
 
 	checkinInfo := models.CheckinData{
-		UserID:         userID,
-		CheckinDate:    time.Now(),
-		PhotoTimestamp: timestamp,
+		UserID:      userID,
+		CheckinDate: timestamp,
 	}
 
 	if err := service.checkinRepo.SaveCheckinToDB(checkinInfo); err != nil {

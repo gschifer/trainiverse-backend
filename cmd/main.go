@@ -8,6 +8,7 @@ import (
 	"trainiverse-backend/internal/firebase"
 	"trainiverse-backend/internal/handlers"
 	"trainiverse-backend/internal/repository"
+	"trainiverse-backend/internal/utils"
 )
 
 func main() {
@@ -16,7 +17,7 @@ func main() {
 
 	checkInRepo := repository.NewCheckinRepo(database.DB)
 	checkout := handlers.NewCheckoutService(checkInRepo)
-	checkin := handlers.NewCheckinService(checkInRepo)
+	checkin := handlers.NewCheckinService(checkInRepo, &utils.ExifDecoder{})
 
 	http.HandleFunc("/checkin", firebase.FirebaseAuthMiddleware(checkin.CheckinHandler))
 	http.HandleFunc("/checkout", firebase.FirebaseAuthMiddleware(checkout.CheckoutHandler))
