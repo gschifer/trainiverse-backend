@@ -17,14 +17,16 @@ import (
 )
 
 type CheckoutService struct {
-	checkinRepo interfaces.CheckinInterface
+	checkinRepo     interfaces.CheckinInterface
 	firebaseService firebase.FirebaseInterface
+	ImageSaver      utils.ImageSaverInterface
 }
 
 func NewCheckoutService(checkinRepo interfaces.CheckinInterface) *CheckoutService {
 	return &CheckoutService{
-		checkinRepo: checkinRepo,
+		checkinRepo:     checkinRepo,
 		firebaseService: &firebase.FirebaseClient{},
+		ImageSaver:      &utils.ImageSaver{},
 	}
 }
 
@@ -72,6 +74,12 @@ func (service *CheckoutService) CheckoutHandler(w http.ResponseWriter, r *http.R
 	}
 
 	userID := service.firebaseService.GetUserID(r)
+
+	if userID == "" {
+		http.Error(w, `{"error":"userID not found"}`, http.StatusUnauthorized)
+		return
+	}
+
 	ok, err := service.checkinRepo.HasCheckedInToday(userID)
 	if err != nil {
 		http.Error(w, `{"error":"failed to check in the database"}`, http.StatusInternalServerError)
@@ -93,14 +101,14 @@ func (service *CheckoutService) CheckoutHandler(w http.ResponseWriter, r *http.R
 		http.Error(w, `{"error":"failed to reset file pointer"}`, http.StatusInternalServerError)
 		return
 	}
-	err = utils.SaveImage(file, header.Filename, "checkouts", userID)
+	err = service.ImageSaver.SaveImage(file, header.Filename, "checkouts", userID)
 	if err != nil {
 		http.Error(w, `{"error":"failed to save image"}`, http.StatusInternalServerError)
 		return
 	}
 
 	_ = json.NewEncoder(w).Encode(map[string]any{
-		"message":     "Check-out saved successfully",
+		"message": "Check-out saved successfully",
 		// "checkin_at":  start,
 		"checkout_at": timestamp,
 		// "duration":    timestamp.Sub(start).String(),

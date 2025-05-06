@@ -15,6 +15,7 @@ type CheckinService struct {
 	checkinRepo    interfaces.CheckinInterface
 	FirebaseClient firebase.FirebaseInterface
 	ExifDecoder    utils.ExifDecoderInterface
+	ImageSaver     utils.ImageSaverInterface
 }
 
 func NewCheckinService(checkinRepo interfaces.CheckinInterface, exifDecoder utils.ExifDecoderInterface) *CheckinService {
@@ -22,6 +23,7 @@ func NewCheckinService(checkinRepo interfaces.CheckinInterface, exifDecoder util
 		checkinRepo:    checkinRepo,
 		FirebaseClient: &firebase.FirebaseClient{},
 		ExifDecoder:    exifDecoder,
+		ImageSaver:     &utils.ImageSaver{},
 	}
 }
 
@@ -29,14 +31,14 @@ func (service CheckinService) CheckinHandler(w http.ResponseWriter, r *http.Requ
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Content-Type", "application/json")
 
-	userID := service.FirebaseClient.GetUserID(r)
-	if userID == "" {
-		http.Error(w, `{"error":"userID not found"}`, http.StatusUnauthorized)
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
-	if r.Method != http.MethodPost {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	userID := service.FirebaseClient.GetUserID(r)
+	if userID == "" {
+		http.Error(w, `{"error":"userID not found"}`, http.StatusUnauthorized)
 		return
 	}
 
@@ -71,12 +73,13 @@ func (service CheckinService) CheckinHandler(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	ok, err := service.checkinRepo.HasCheckedInToday(userID)
+	hasChecked, err := service.checkinRepo.HasCheckedInToday(userID)
 	if err != nil {
 		http.Error(w, `{"error":"failed to check in the database"}`, http.StatusInternalServerError)
 		return
 	}
-	if ok {
+	
+	if hasChecked {
 		http.Error(w, `{"error":"user has already checked in today"}`, http.StatusConflict)
 		return
 	}
@@ -86,7 +89,7 @@ func (service CheckinService) CheckinHandler(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	err = utils.SaveImage(file, header.Filename, "checkins", userID)
+	err = service.ImageSaver.SaveImage(file, header.Filename, "checkins", userID)
 	if err != nil {
 		http.Error(w, `{"error":"failed to save image"}`, http.StatusInternalServerError)
 		return
