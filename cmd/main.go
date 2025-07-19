@@ -16,7 +16,8 @@ func main() {
 	database.InitDatabase()
 
 	checkInRepo := repository.NewCheckinRepo(database.DB)
-	checkout := handlers.NewCheckoutService(checkInRepo)
+	checkoutRepo := repository.NewCheckoutRepo(database.DB)
+	checkout := handlers.NewCheckoutService(checkInRepo, checkoutRepo)
 	checkin := handlers.NewCheckinService(checkInRepo, &utils.ExifDecoder{})
 
 	http.HandleFunc("/checkin", firebase.FirebaseAuthMiddleware(checkin.CheckinHandler))

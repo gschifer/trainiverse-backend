@@ -2,9 +2,10 @@
 // github.com/vektra/mockery
 // template: testify
 
-package mocks
+package interfaces
 
 import (
+	"time"
 	"trainiverse-backend/internal/models"
 
 	mock "github.com/stretchr/testify/mock"
@@ -35,6 +36,126 @@ type MockCheckinInterface_Expecter struct {
 
 func (_m *MockCheckinInterface) EXPECT() *MockCheckinInterface_Expecter {
 	return &MockCheckinInterface_Expecter{mock: &_m.Mock}
+}
+
+// GetCheckinDate provides a mock function for the type MockCheckinInterface
+func (_mock *MockCheckinInterface) GetCheckinDate(userId string) (time.Time, error) {
+	ret := _mock.Called(userId)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetCheckinDate")
+	}
+
+	var r0 time.Time
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(string) (time.Time, error)); ok {
+		return returnFunc(userId)
+	}
+	if returnFunc, ok := ret.Get(0).(func(string) time.Time); ok {
+		r0 = returnFunc(userId)
+	} else {
+		r0 = ret.Get(0).(time.Time)
+	}
+	if returnFunc, ok := ret.Get(1).(func(string) error); ok {
+		r1 = returnFunc(userId)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockCheckinInterface_GetCheckinDate_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetCheckinDate'
+type MockCheckinInterface_GetCheckinDate_Call struct {
+	*mock.Call
+}
+
+// GetCheckinDate is a helper method to define mock.On call
+//   - userId string
+func (_e *MockCheckinInterface_Expecter) GetCheckinDate(userId interface{}) *MockCheckinInterface_GetCheckinDate_Call {
+	return &MockCheckinInterface_GetCheckinDate_Call{Call: _e.mock.On("GetCheckinDate", userId)}
+}
+
+func (_c *MockCheckinInterface_GetCheckinDate_Call) Run(run func(userId string)) *MockCheckinInterface_GetCheckinDate_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 string
+		if args[0] != nil {
+			arg0 = args[0].(string)
+		}
+		run(
+			arg0,
+		)
+	})
+	return _c
+}
+
+func (_c *MockCheckinInterface_GetCheckinDate_Call) Return(time1 time.Time, err error) *MockCheckinInterface_GetCheckinDate_Call {
+	_c.Call.Return(time1, err)
+	return _c
+}
+
+func (_c *MockCheckinInterface_GetCheckinDate_Call) RunAndReturn(run func(userId string) (time.Time, error)) *MockCheckinInterface_GetCheckinDate_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetPathImage provides a mock function for the type MockCheckinInterface
+func (_mock *MockCheckinInterface) GetPathImage(userID string) (string, error) {
+	ret := _mock.Called(userID)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetPathImage")
+	}
+
+	var r0 string
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(string) (string, error)); ok {
+		return returnFunc(userID)
+	}
+	if returnFunc, ok := ret.Get(0).(func(string) string); ok {
+		r0 = returnFunc(userID)
+	} else {
+		r0 = ret.Get(0).(string)
+	}
+	if returnFunc, ok := ret.Get(1).(func(string) error); ok {
+		r1 = returnFunc(userID)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockCheckinInterface_GetPathImage_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetPathImage'
+type MockCheckinInterface_GetPathImage_Call struct {
+	*mock.Call
+}
+
+// GetPathImage is a helper method to define mock.On call
+//   - userID string
+func (_e *MockCheckinInterface_Expecter) GetPathImage(userID interface{}) *MockCheckinInterface_GetPathImage_Call {
+	return &MockCheckinInterface_GetPathImage_Call{Call: _e.mock.On("GetPathImage", userID)}
+}
+
+func (_c *MockCheckinInterface_GetPathImage_Call) Run(run func(userID string)) *MockCheckinInterface_GetPathImage_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 string
+		if args[0] != nil {
+			arg0 = args[0].(string)
+		}
+		run(
+			arg0,
+		)
+	})
+	return _c
+}
+
+func (_c *MockCheckinInterface_GetPathImage_Call) Return(s string, err error) *MockCheckinInterface_GetPathImage_Call {
+	_c.Call.Return(s, err)
+	return _c
+}
+
+func (_c *MockCheckinInterface_GetPathImage_Call) RunAndReturn(run func(userID string) (string, error)) *MockCheckinInterface_GetPathImage_Call {
+	_c.Call.Return(run)
+	return _c
 }
 
 // HasCheckedInToday provides a mock function for the type MockCheckinInterface
@@ -69,14 +190,20 @@ type MockCheckinInterface_HasCheckedInToday_Call struct {
 }
 
 // HasCheckedInToday is a helper method to define mock.On call
-//   - userID
+//   - userID string
 func (_e *MockCheckinInterface_Expecter) HasCheckedInToday(userID interface{}) *MockCheckinInterface_HasCheckedInToday_Call {
 	return &MockCheckinInterface_HasCheckedInToday_Call{Call: _e.mock.On("HasCheckedInToday", userID)}
 }
 
 func (_c *MockCheckinInterface_HasCheckedInToday_Call) Run(run func(userID string)) *MockCheckinInterface_HasCheckedInToday_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(string))
+		var arg0 string
+		if args[0] != nil {
+			arg0 = args[0].(string)
+		}
+		run(
+			arg0,
+		)
 	})
 	return _c
 }
@@ -114,14 +241,20 @@ type MockCheckinInterface_SaveCheckinToDB_Call struct {
 }
 
 // SaveCheckinToDB is a helper method to define mock.On call
-//   - data
+//   - data models.CheckinData
 func (_e *MockCheckinInterface_Expecter) SaveCheckinToDB(data interface{}) *MockCheckinInterface_SaveCheckinToDB_Call {
 	return &MockCheckinInterface_SaveCheckinToDB_Call{Call: _e.mock.On("SaveCheckinToDB", data)}
 }
 
 func (_c *MockCheckinInterface_SaveCheckinToDB_Call) Run(run func(data models.CheckinData)) *MockCheckinInterface_SaveCheckinToDB_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(models.CheckinData))
+		var arg0 models.CheckinData
+		if args[0] != nil {
+			arg0 = args[0].(models.CheckinData)
+		}
+		run(
+			arg0,
+		)
 	})
 	return _c
 }

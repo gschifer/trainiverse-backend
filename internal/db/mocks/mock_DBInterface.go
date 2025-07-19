@@ -2,7 +2,7 @@
 // github.com/vektra/mockery
 // template: testify
 
-package mocks
+package database
 
 import (
 	"database/sql"
@@ -77,8 +77,8 @@ type MockDBInterface_Exec_Call struct {
 }
 
 // Exec is a helper method to define mock.On call
-//   - query
-//   - args
+//   - query string
+//   - args ...any
 func (_e *MockDBInterface_Expecter) Exec(query interface{}, args ...interface{}) *MockDBInterface_Exec_Call {
 	return &MockDBInterface_Exec_Call{Call: _e.mock.On("Exec",
 		append([]interface{}{query}, args...)...)}
@@ -86,8 +86,20 @@ func (_e *MockDBInterface_Expecter) Exec(query interface{}, args ...interface{})
 
 func (_c *MockDBInterface_Exec_Call) Run(run func(query string, args ...any)) *MockDBInterface_Exec_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]any)
-		run(args[0].(string), variadicArgs...)
+		var arg0 string
+		if args[0] != nil {
+			arg0 = args[0].(string)
+		}
+		var arg1 []any
+		var variadicArgs []any
+		if len(args) > 1 {
+			variadicArgs = args[1].([]any)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -136,14 +148,20 @@ type MockDBInterface_Prepare_Call struct {
 }
 
 // Prepare is a helper method to define mock.On call
-//   - query
+//   - query string
 func (_e *MockDBInterface_Expecter) Prepare(query interface{}) *MockDBInterface_Prepare_Call {
 	return &MockDBInterface_Prepare_Call{Call: _e.mock.On("Prepare", query)}
 }
 
 func (_c *MockDBInterface_Prepare_Call) Run(run func(query string)) *MockDBInterface_Prepare_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(string))
+		var arg0 string
+		if args[0] != nil {
+			arg0 = args[0].(string)
+		}
+		run(
+			arg0,
+		)
 	})
 	return _c
 }
@@ -198,8 +216,8 @@ type MockDBInterface_Query_Call struct {
 }
 
 // Query is a helper method to define mock.On call
-//   - query
-//   - args
+//   - query string
+//   - args ...any
 func (_e *MockDBInterface_Expecter) Query(query interface{}, args ...interface{}) *MockDBInterface_Query_Call {
 	return &MockDBInterface_Query_Call{Call: _e.mock.On("Query",
 		append([]interface{}{query}, args...)...)}
@@ -207,8 +225,20 @@ func (_e *MockDBInterface_Expecter) Query(query interface{}, args ...interface{}
 
 func (_c *MockDBInterface_Query_Call) Run(run func(query string, args ...any)) *MockDBInterface_Query_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]any)
-		run(args[0].(string), variadicArgs...)
+		var arg0 string
+		if args[0] != nil {
+			arg0 = args[0].(string)
+		}
+		var arg1 []any
+		var variadicArgs []any
+		if len(args) > 1 {
+			variadicArgs = args[1].([]any)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -254,8 +284,8 @@ type MockDBInterface_QueryRow_Call struct {
 }
 
 // QueryRow is a helper method to define mock.On call
-//   - query
-//   - args
+//   - query string
+//   - args ...any
 func (_e *MockDBInterface_Expecter) QueryRow(query interface{}, args ...interface{}) *MockDBInterface_QueryRow_Call {
 	return &MockDBInterface_QueryRow_Call{Call: _e.mock.On("QueryRow",
 		append([]interface{}{query}, args...)...)}
@@ -263,8 +293,20 @@ func (_e *MockDBInterface_Expecter) QueryRow(query interface{}, args ...interfac
 
 func (_c *MockDBInterface_QueryRow_Call) Run(run func(query string, args ...any)) *MockDBInterface_QueryRow_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]any)
-		run(args[0].(string), variadicArgs...)
+		var arg0 string
+		if args[0] != nil {
+			arg0 = args[0].(string)
+		}
+		var arg1 []any
+		var variadicArgs []any
+		if len(args) > 1 {
+			variadicArgs = args[1].([]any)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }

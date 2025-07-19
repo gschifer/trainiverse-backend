@@ -1,13 +1,9 @@
 all: false
 dir: '{{.InterfaceDir}}/mocks'
-filename: "mock_{{.InterfaceName}}.go" 
-force-file-write: false
-formatter: goimports
+filename: "mock_{{.InterfaceName}}.go"
 log-level: info
 structname: "Mock{{.InterfaceName}}"
-pkgname: "mocks"
 recursive: false
-template: testify
 
 packages:
     trainiverse-backend/internal/db:

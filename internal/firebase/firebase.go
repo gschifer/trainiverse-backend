@@ -27,7 +27,7 @@ type contextKey string
 var keyForUserIDs = contextKey("userID")
 
 func StartFirebase() {
-	opt := option.WithCredentialsFile("../internal/firebase/serviceAccountKey.json")
+	opt := option.WithCredentialsFile("internal/firebase/serviceAccountKey.json")
 
 	app, err := firebase.NewApp(context.Background(), nil, opt)
 	if err != nil {

@@ -78,7 +78,7 @@ func (service CheckinService) CheckinHandler(w http.ResponseWriter, r *http.Requ
 		http.Error(w, `{"error":"failed to check in the database"}`, http.StatusInternalServerError)
 		return
 	}
-	
+
 	if hasChecked {
 		http.Error(w, `{"error":"user has already checked in today"}`, http.StatusConflict)
 		return
@@ -98,6 +98,7 @@ func (service CheckinService) CheckinHandler(w http.ResponseWriter, r *http.Requ
 	checkinInfo := models.CheckinData{
 		UserID:      userID,
 		CheckinDate: timestamp,
+		FileName:    header.Filename,
 	}
 
 	if err := service.checkinRepo.SaveCheckinToDB(checkinInfo); err != nil {

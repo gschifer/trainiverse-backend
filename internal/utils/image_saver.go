@@ -16,7 +16,7 @@ type ImageSaverInterface interface {
 type ImageSaver struct{}
 
 func (service *ImageSaver) SaveImage(file multipart.File, originalName, folder, userID string) error {
-	timestamp := time.Now().Format(time.RFC3339)
+	timestamp := time.Now().Format("20060102_150405")
 	filename := fmt.Sprintf("%s_%s%s", userID, timestamp, filepath.Ext(originalName))
 	outPath := filepath.Join("storage", folder, filename)
 

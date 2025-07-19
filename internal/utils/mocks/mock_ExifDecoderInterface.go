@@ -2,7 +2,7 @@
 // github.com/vektra/mockery
 // template: testify
 
-package mocks
+package utils
 
 import (
 	"io"
@@ -72,14 +72,20 @@ type MockExifDecoderInterface_Decode_Call struct {
 }
 
 // Decode is a helper method to define mock.On call
-//   - file
+//   - file io.Reader
 func (_e *MockExifDecoderInterface_Expecter) Decode(file interface{}) *MockExifDecoderInterface_Decode_Call {
 	return &MockExifDecoderInterface_Decode_Call{Call: _e.mock.On("Decode", file)}
 }
 
 func (_c *MockExifDecoderInterface_Decode_Call) Run(run func(file io.Reader)) *MockExifDecoderInterface_Decode_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(io.Reader))
+		var arg0 io.Reader
+		if args[0] != nil {
+			arg0 = args[0].(io.Reader)
+		}
+		run(
+			arg0,
+		)
 	})
 	return _c
 }

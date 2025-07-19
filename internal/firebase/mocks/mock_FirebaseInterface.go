@@ -2,7 +2,7 @@
 // github.com/vektra/mockery
 // template: testify
 
-package mocks
+package firebase
 
 import (
 	"net/http"
@@ -60,14 +60,20 @@ type MockFirebaseInterface_GetUserID_Call struct {
 }
 
 // GetUserID is a helper method to define mock.On call
-//   - r
+//   - r *http.Request
 func (_e *MockFirebaseInterface_Expecter) GetUserID(r interface{}) *MockFirebaseInterface_GetUserID_Call {
 	return &MockFirebaseInterface_GetUserID_Call{Call: _e.mock.On("GetUserID", r)}
 }
 
 func (_c *MockFirebaseInterface_GetUserID_Call) Run(run func(r *http.Request)) *MockFirebaseInterface_GetUserID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(*http.Request))
+		var arg0 *http.Request
+		if args[0] != nil {
+			arg0 = args[0].(*http.Request)
+		}
+		run(
+			arg0,
+		)
 	})
 	return _c
 }

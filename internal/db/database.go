@@ -28,7 +28,7 @@ func GetDB() DBInterface {
 var DB *sql.DB
 
 func InitDatabase() {
-	envErr := godotenv.Load("../internal/config/.env")
+	envErr := godotenv.Load("internal/config/.env")
 	if envErr != nil {
 		log.Fatal("Error loading .env file")
 	}
@@ -64,7 +64,7 @@ func RunMigrations(db *sql.DB) {
 	}
 
 	m, err := migrate.NewWithDatabaseInstance(
-		"file://../internal/db/migrations",
+		"file://internal/db/migrations",
 		"postgres", driver)
 
 	if err != nil {

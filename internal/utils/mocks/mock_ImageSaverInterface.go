@@ -2,7 +2,7 @@
 // github.com/vektra/mockery
 // template: testify
 
-package mocks
+package utils
 
 import (
 	"mime/multipart"
@@ -60,17 +60,38 @@ type MockImageSaverInterface_SaveImage_Call struct {
 }
 
 // SaveImage is a helper method to define mock.On call
-//   - file
-//   - originalName
-//   - folder
-//   - userID
+//   - file multipart.File
+//   - originalName string
+//   - folder string
+//   - userID string
 func (_e *MockImageSaverInterface_Expecter) SaveImage(file interface{}, originalName interface{}, folder interface{}, userID interface{}) *MockImageSaverInterface_SaveImage_Call {
 	return &MockImageSaverInterface_SaveImage_Call{Call: _e.mock.On("SaveImage", file, originalName, folder, userID)}
 }
 
 func (_c *MockImageSaverInterface_SaveImage_Call) Run(run func(file multipart.File, originalName string, folder string, userID string)) *MockImageSaverInterface_SaveImage_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(multipart.File), args[1].(string), args[2].(string), args[3].(string))
+		var arg0 multipart.File
+		if args[0] != nil {
+			arg0 = args[0].(multipart.File)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 string
+		if args[2] != nil {
+			arg2 = args[2].(string)
+		}
+		var arg3 string
+		if args[3] != nil {
+			arg3 = args[3].(string)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+		)
 	})
 	return _c
 }
