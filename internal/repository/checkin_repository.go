@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"fmt"
+	"time"
 	"trainiverse-backend/internal/interfaces"
 	"trainiverse-backend/internal/models"
 	"trainiverse-backend/internal/utils"
@@ -16,6 +17,40 @@ func NewCheckinRepo(db *sql.DB) interfaces.CheckinInterface {
 	return &CheckinRepository{
 		DB: db,
 	}
+}
+
+func (checkinRepo *CheckinRepository) GetPathImage(userId string) (string, error) {
+	query := `
+		SELECT image_path 
+		FROM checkins 
+		WHERE user_id = $1 
+		  AND DATE(checkin_date) = CURRENT_DATE;
+	`
+
+	var imagePath string
+	err := checkinRepo.DB.QueryRow(query, userId).Scan(&imagePath)
+	if err != nil {
+		fmt.Println("Error fetching image path:", err)
+	}
+
+	return imagePath, nil
+}
+
+func (checkinRepo *CheckinRepository) GetCheckinDate(userId string) (time.Time, error) {
+	query := `
+		SELECT checkin_date 
+		FROM checkins 
+		WHERE user_id = $1 
+		  AND DATE(checkin_date) = CURRENT_DATE;
+	`
+
+	var checkinDate time.Time
+	err := checkinRepo.DB.QueryRow(query, userId).Scan(&checkinDate)
+	if err != nil {
+		fmt.Println("Error fetching checkin date:", err)
+	}
+
+	return checkinDate, nil
 }
 
 func (checkinRepo *CheckinRepository) HasCheckedInToday(userID string) (bool, error) {
@@ -41,7 +76,8 @@ func (checkinRepo *CheckinRepository) SaveCheckinToDB(data models.CheckinData) e
 	`
 
 	// Get the image path where the image was saved
-	imagePath := utils.BuildImagePath(data.UserID)
+	imagePath := utils.BuildImagePathForCheckin(data)
+	//imagePath := utils.BuildImagePathForCheckin(data)
 
 	var id int
 	err := checkinRepo.DB.QueryRow(query, data.UserID, imagePath, data.CheckinDate).Scan(&id)

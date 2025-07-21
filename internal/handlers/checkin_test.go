@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 	fireBaseMocks "trainiverse-backend/internal/firebase/mocks"
-	"trainiverse-backend/internal/interfaces/mocks"
+	checkinMock "trainiverse-backend/internal/interfaces/mocks"
 	utilMock "trainiverse-backend/internal/utils/mocks"
 
 	"github.com/rwcarlsen/goexif/exif"
@@ -57,7 +57,7 @@ func TestCheckinHandler_When_File_Is_Missing(t *testing.T) {
 	req.Header.Set("Content-Type", writer.FormDataContentType())
 	rec := httptest.NewRecorder()
 
-	mockCheckinRepo := new(mocks.MockCheckinInterface)
+	mockCheckinRepo := new(checkinMock.MockCheckinInterface)
 	mockFirebaseClient := new(fireBaseMocks.MockFirebaseInterface)
 	mockExifDecoder := new(utilMock.MockExifDecoderInterface)
 
@@ -86,7 +86,7 @@ func TestCheckinHandler_ParseMultipartFormError(t *testing.T) {
 	req.Header.Set("Content-Type", "multipart/form-data")
 	rec := httptest.NewRecorder()
 
-	mockCheckinRepo := new(mocks.MockCheckinInterface)
+	mockCheckinRepo := new(checkinMock.MockCheckinInterface)
 	mockFirebaseClient := new(fireBaseMocks.MockFirebaseInterface)
 	mockExifDecoder := new(utilMock.MockExifDecoderInterface)
 
@@ -115,7 +115,7 @@ func TestCheckinHandler_When_Method_Is_NotAllowed(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/checkin", nil)
 	rec := httptest.NewRecorder()
 
-	mockCheckinRepo := new(mocks.MockCheckinInterface)
+	mockCheckinRepo := new(checkinMock.MockCheckinInterface)
 	mockFirebaseClient := new(fireBaseMocks.MockFirebaseInterface)
 	mockExifDecoder := new(utilMock.MockExifDecoderInterface)
 
@@ -165,10 +165,10 @@ func TestCheckinHandler_When_Photo_Not_From_Today(t *testing.T) {
 
 	mockFirebaseClient.On("GetUserID", req).Return("test-user-id")
 
-	imagePath := "testdata/test_image.jpeg"
-	setExifDateTime(t, imagePath, time.Now().AddDate(0, 0, -1).Format(time.DateTime))
+	imagePath := "../testdata/test_image.jpeg"
+	setExifDateTime(t, imagePath, time.Now().Add(-24*time.Hour).Format(time.DateTime))
 
-	file, _ := os.Open("testdata/test_image.jpeg")
+	file, _ := os.Open(imagePath)
 	x, _ := exif.Decode(file)
 
 	mockExifDecoder.On("Decode", mock.Anything).Return(x, nil)
@@ -208,10 +208,10 @@ func TestCheckinHandler_Error_In_The_Database_When_Try_To_Check_If_User_Already_
 	mockFirebaseClient.On("GetUserID", req).Return("test-user-id")
 	mockCheckinRepo.On("HasCheckedInToday", "test-user-id").Return(false, errors.New("failed to check in the database"))
 
-	imagePath := "testdata/test_image.jpeg"
+	imagePath := "../testdata/test_image.jpeg"
 	setExifDateTime(t, imagePath, time.Now().Format(time.DateTime))
 
-	file, _ := os.Open("testdata/test_image.jpeg")
+	file, _ := os.Open(imagePath)
 	x, _ := exif.Decode(file)
 
 	mockExifDecoder.On("Decode", mock.Anything).Return(x, nil)
@@ -244,10 +244,10 @@ func TestCheckinHandler_UserAlreadyCheckedIn(t *testing.T) {
 	mockFirebaseClient.On("GetUserID", req).Return("test-user-id")
 	mockCheckinRepo.On("HasCheckedInToday", "test-user-id").Return(true, nil)
 
-	imagePath := "testdata/test_image.jpeg"
+	imagePath := "../testdata/test_image.jpeg"
 	setExifDateTime(t, imagePath, time.Now().Format(time.DateTime))
 
-	file, _ := os.Open("testdata/test_image.jpeg")
+	file, _ := os.Open(imagePath)
 	x, _ := exif.Decode(file)
 
 	mockExifDecoder.On("Decode", mock.Anything).Return(x, nil)
@@ -282,10 +282,10 @@ func TestCheckinHandler_Error_On_SaveImage_In_The_Database(t *testing.T) {
 	mockCheckinRepo.On("SaveCheckinToDB", mock.AnythingOfType("models.CheckinData")).Return(errors.New("failed to save checkin to database"))
 	mockImageSaver.On("SaveImage", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(nil)
 
-	imagePath := "testdata/test_image.jpeg"
+	imagePath := "../testdata/test_image.jpeg"
 	setExifDateTime(t, imagePath, time.Now().Format(time.DateTime))
 
-	file, _ := os.Open("testdata/test_image.jpeg")
+	file, _ := os.Open(imagePath)
 	x, _ := exif.Decode(file)
 
 	mockExifDecoder.On("Decode", mock.Anything).Return(x, nil)
@@ -320,10 +320,10 @@ func TestCheckinHandler_Success(t *testing.T) {
 	mockCheckinRepo.On("SaveCheckinToDB", mock.AnythingOfType("models.CheckinData")).Return(nil)
 	mockImageSaver.On("SaveImage", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(nil)
 
-	imagePath := "testdata/test_image.jpeg"
+	imagePath := "../testdata/test_image.jpeg"
 	setExifDateTime(t, imagePath, time.Now().Format(time.DateTime))
 
-	file, _ := os.Open("testdata/test_image.jpeg")
+	file, _ := os.Open(imagePath)
 	x, _ := exif.Decode(file)
 
 	mockExifDecoder.On("Decode", mock.Anything).Return(x, nil)
@@ -357,10 +357,10 @@ func TestCheckinHandler_FailedToSaveImage(t *testing.T) {
 	mockCheckinRepo.On("HasCheckedInToday", "test-user-id").Return(false, nil)
 	mockImageSaver.On("SaveImage", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(errors.New("failed to save image"))
 
-	imagePath := "testdata/test_image.jpeg"
+	imagePath := "../testdata/test_image.jpeg"
 	setExifDateTime(t, imagePath, time.Now().Format(time.DateTime))
 
-	file, _ := os.Open("testdata/test_image.jpeg")
+	file, _ := os.Open(imagePath)
 	x, _ := exif.Decode(file)
 
 	mockExifDecoder.On("Decode", mock.Anything).Return(x, nil)
@@ -387,7 +387,7 @@ func TestCheckinHandler_FailedToSaveImage(t *testing.T) {
 	mockExifDecoder.AssertExpectations(t)
 }
 
-func setupMocks(t *testing.T) (*http.Request, *httptest.ResponseRecorder, *mocks.MockCheckinInterface, *fireBaseMocks.MockFirebaseInterface, *utilMock.MockExifDecoderInterface, *utilMock.MockImageSaverInterface) {
+func setupMocks(t *testing.T) (*http.Request, *httptest.ResponseRecorder, *checkinMock.MockCheckinInterface, *fireBaseMocks.MockFirebaseInterface, *utilMock.MockExifDecoderInterface, *utilMock.MockImageSaverInterface) {
 	var buf bytes.Buffer
 	writer := multipart.NewWriter(&buf)
 	part, err := writer.CreateFormFile("file", "test.jpg")
@@ -400,7 +400,7 @@ func setupMocks(t *testing.T) (*http.Request, *httptest.ResponseRecorder, *mocks
 	req.Header.Set("Content-Type", writer.FormDataContentType())
 	rec := httptest.NewRecorder()
 
-	mockCheckinRepo := new(mocks.MockCheckinInterface)
+	mockCheckinRepo := new(checkinMock.MockCheckinInterface)
 	mockFirebaseClient := new(fireBaseMocks.MockFirebaseInterface)
 	mockExifDecoder := new(utilMock.MockExifDecoderInterface)
 	mockImageSaver := new(utilMock.MockImageSaverInterface)
