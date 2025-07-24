@@ -4,26 +4,21 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1487976e-2f9b-4a41-b2aa-cf10d5e20957" name="Changes" comment="test: refactor check-in tests to use updated mock implementations" />
+    <list default="true" id="1487976e-2f9b-4a41-b2aa-cf10d5e20957" name="Changes" comment="test: add image for tests">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_21_07_25,_19_26_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_21_07_25__19_26__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/testdata/test_image.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/internal/testdata/test_image.jpeg" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Go File" />
-      </list>
-    </option>
-  </component>
   <component name="GOROOT" url="file://$USER_HOME$/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.24.4.darwin-arm64" />
   <component name="Git.Settings">
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$" value="dev" />
-      </map>
-    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -38,163 +33,34 @@
     &quot;accountId&quot;: &quot;3d87503f-1a6c-4b0c-aec2-09f8f34da83a&quot;
   }
 }</component>
-  <component name="HighlightingSettingsPerFile">
-    <setting file="file://$USER_HOME$/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.24.4.darwin-arm64/src/runtime/panic.go" root0="SKIP_INSPECTION" />
-  </component>
-  <component name="KubernetesApiPersistence">{}</component>
-  <component name="KubernetesApiProvider">{
-  &quot;isMigrated&quot;: true
-}</component>
   <component name="ProjectColorInfo">{
-  &quot;customColor&quot;: &quot;&quot;,
-  &quot;associatedIndex&quot;: 0
+  &quot;associatedIndex&quot;: 2
 }</component>
-  <component name="ProjectId" id="2zTOwIr4vyQo3Xr2lUQBa6Byfmm" />
+  <component name="ProjectId" id="30IRMOlWBHDi3yh0gRy9aHiNJZD" />
   <component name="ProjectViewState">
     <option name="autoscrollFromSource" value="true" />
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultGoTemplateProperty": "Go File",
-    "Go Build.go build trainiverse-backend/cmd.executor": "Debug",
-    "Go Test.TestCheckinHandler_Error_In_The_Database_When_Try_To_Check_If_User_Already_Checkin in trainiverse-backend/internal/handlers.executor": "Debug",
-    "Go Test.TestCheckinHandler_Error_On_SaveImage_In_The_Database in trainiverse-backend/internal/handlers.executor": "Run",
-    "Go Test.TestCheckinHandler_FailedToSaveImage in trainiverse-backend/internal/handlers.executor": "Run",
-    "Go Test.TestCheckinHandler_ParseMultipartFormError in trainiverse-backend/internal/handlers.executor": "Run",
-    "Go Test.TestCheckinHandler_Success in trainiverse-backend/internal/handlers.executor": "Run",
-    "Go Test.TestCheckinHandler_UserAlreadyCheckedIn in trainiverse-backend/internal/handlers.executor": "Run",
-    "Go Test.TestCheckinHandler_When_File_Is_Missing in trainiverse-backend/internal/handlers.executor": "Run",
-    "Go Test.TestCheckinHandler_When_Method_Is_NotAllowed in trainiverse-backend/internal/handlers.executor": "Run",
-    "Go Test.TestCheckinHandler_When_PhotoIsNot_FromToday in trainiverse-backend/internal/handlers.executor": "Run",
-    "Go Test.TestCheckinHandler_When_Photo_Not_From_Today in trainiverse-backend/internal/handlers.executor": "Run",
-    "Go Test.TestCheckinHandler_When_UserNotFound in trainiverse-backend/internal/handlers.executor": "Run",
-    "Go Test.TestHasCheckedInToday in trainiverse-backend/internal/repository.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.GoLinterPluginOnboarding": "true",
-    "RunOnceActivity.GoLinterPluginStorageMigration": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.go.formatter.settings.were.checked": "true",
-    "RunOnceActivity.go.migrated.go.modules.settings": "true",
-    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
-    "bazel.project.detector.is.bazel.project": "true",
-    "git-widget-placeholder": "#28 on feat/GITISSUE-8",
-    "go.import.settings.migrated": "true",
-    "go.sdk.automatically.set": "true",
-    "last_opened_file_path": "/Users/gabrielschiferdecke",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm"
-  },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "postgresql"
-    ]
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.GoLinterPluginOnboarding&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.GoLinterPluginStorageMigration&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;#28 on feat/GITISSUE-8&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/gabrielschiferdecke&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
   }
-}]]></component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/internal/handlers/testdata" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/internal" />
-      <recent name="$PROJECT_DIR$/internal/handlers/testdata" />
-      <recent name="$PROJECT_DIR$/internal/handlers" />
-      <recent name="$PROJECT_DIR$/testdata" />
-    </key>
-  </component>
-  <component name="RunManager" selected="Go Build.go build trainiverse-backend/cmd">
-    <configuration name="go build trainiverse-backend/cmd" type="GoApplicationRunConfiguration" factoryName="Go Application" nameIsGenerated="true">
-      <module name="trainiverse-backend" />
-      <working_directory value="$PROJECT_DIR$" />
-      <EXTENSION ID="net.ashald.envfile">
-        <option name="IS_ENABLED" value="false" />
-        <option name="IS_SUBST" value="false" />
-        <option name="IS_PATH_MACRO_SUPPORTED" value="false" />
-        <option name="IS_IGNORE_MISSING_FILES" value="false" />
-        <option name="IS_ENABLE_EXPERIMENTAL_INTEGRATIONS" value="false" />
-        <ENTRIES>
-          <ENTRY IS_ENABLED="true" PARSER="runconfig" IS_EXECUTABLE="false" />
-        </ENTRIES>
-      </EXTENSION>
-      <kind value="PACKAGE" />
-      <package value="trainiverse-backend/cmd" />
-      <directory value="$PROJECT_DIR$" />
-      <filePath value="$PROJECT_DIR$" />
-      <method v="2" />
-    </configuration>
-    <configuration name="TestCheckinHandler_Error_On_SaveImage_In_The_Database in trainiverse-backend/internal/handlers" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
-      <module name="trainiverse-backend" />
-      <working_directory value="$PROJECT_DIR$/internal/handlers" />
-      <root_directory value="$PROJECT_DIR$" />
-      <kind value="PACKAGE" />
-      <package value="trainiverse-backend/internal/handlers" />
-      <directory value="$PROJECT_DIR$" />
-      <filePath value="$PROJECT_DIR$" />
-      <framework value="gotest" />
-      <pattern value="^\QTestCheckinHandler_Error_On_SaveImage_In_The_Database\E$" />
-      <method v="2" />
-    </configuration>
-    <configuration name="TestCheckinHandler_FailedToSaveImage in trainiverse-backend/internal/handlers" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
-      <module name="trainiverse-backend" />
-      <working_directory value="$PROJECT_DIR$/internal/handlers" />
-      <root_directory value="$PROJECT_DIR$" />
-      <kind value="PACKAGE" />
-      <package value="trainiverse-backend/internal/handlers" />
-      <directory value="$PROJECT_DIR$" />
-      <filePath value="$PROJECT_DIR$" />
-      <framework value="gotest" />
-      <pattern value="^\QTestCheckinHandler_FailedToSaveImage\E$" />
-      <method v="2" />
-    </configuration>
-    <configuration name="TestCheckinHandler_Success in trainiverse-backend/internal/handlers" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
-      <module name="trainiverse-backend" />
-      <working_directory value="$PROJECT_DIR$/internal/handlers" />
-      <root_directory value="$PROJECT_DIR$" />
-      <kind value="PACKAGE" />
-      <package value="trainiverse-backend/internal/handlers" />
-      <directory value="$PROJECT_DIR$" />
-      <filePath value="$PROJECT_DIR$" />
-      <framework value="gotest" />
-      <pattern value="^\QTestCheckinHandler_Success\E$" />
-      <method v="2" />
-    </configuration>
-    <configuration name="TestCheckinHandler_UserAlreadyCheckedIn in trainiverse-backend/internal/handlers" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
-      <module name="trainiverse-backend" />
-      <working_directory value="$PROJECT_DIR$/internal/handlers" />
-      <root_directory value="$PROJECT_DIR$" />
-      <kind value="PACKAGE" />
-      <package value="trainiverse-backend/internal/handlers" />
-      <directory value="$PROJECT_DIR$" />
-      <filePath value="$PROJECT_DIR$" />
-      <framework value="gotest" />
-      <pattern value="^\QTestCheckinHandler_UserAlreadyCheckedIn\E$" />
-      <method v="2" />
-    </configuration>
-    <configuration name="TestCheckinHandler_When_Photo_Not_From_Today in trainiverse-backend/internal/handlers" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
-      <module name="trainiverse-backend" />
-      <working_directory value="$PROJECT_DIR$/internal/handlers" />
-      <root_directory value="$PROJECT_DIR$" />
-      <kind value="PACKAGE" />
-      <package value="trainiverse-backend/internal/handlers" />
-      <directory value="$PROJECT_DIR$" />
-      <filePath value="$PROJECT_DIR$" />
-      <framework value="gotest" />
-      <pattern value="^\QTestCheckinHandler_When_Photo_Not_From_Today\E$" />
-      <method v="2" />
-    </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Go Test.TestCheckinHandler_When_Photo_Not_From_Today in trainiverse-backend/internal/handlers" />
-        <item itemvalue="Go Test.TestCheckinHandler_FailedToSaveImage in trainiverse-backend/internal/handlers" />
-        <item itemvalue="Go Test.TestCheckinHandler_Success in trainiverse-backend/internal/handlers" />
-        <item itemvalue="Go Test.TestCheckinHandler_Error_On_SaveImage_In_The_Database in trainiverse-backend/internal/handlers" />
-        <item itemvalue="Go Test.TestCheckinHandler_UserAlreadyCheckedIn in trainiverse-backend/internal/handlers" />
-      </list>
-    </recent_temporary>
-  </component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -205,11 +71,11 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="1487976e-2f9b-4a41-b2aa-cf10d5e20957" name="Changes" comment="" />
-      <created>1751751833772</created>
+      <changelist id="1487976e-2f9b-4a41-b2aa-cf10d5e20957" name="Changes" comment="test: add image for tests" />
+      <created>1753313053416</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1751751833772</updated>
+      <updated>1753313053416</updated>
     </task>
     <servers />
   </component>
@@ -217,30 +83,10 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="feat: some enhancements" />
-    <MESSAGE value="test: refactor check-in tests to use updated mock implementations" />
-    <option name="LAST_COMMIT_MESSAGE" value="test: refactor check-in tests to use updated mock implementations" />
+    <MESSAGE value="test: add image for tests" />
+    <option name="LAST_COMMIT_MESSAGE" value="test: add image for tests" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/internal/handlers/checkout.go</url>
-          <line>115</line>
-          <option name="timeStamp" value="19" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/internal/handlers/checkin_test.go</url>
-          <line>171</line>
-          <option name="timeStamp" value="22" />
-        </line-breakpoint>
-      </breakpoints>
-      <default-breakpoints>
-        <breakpoint type="DlvErrorBreakpoint" />
-      </default-breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
