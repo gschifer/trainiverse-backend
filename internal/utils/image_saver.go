@@ -7,21 +7,16 @@ import (
 	"os"
 	"path/filepath"
 	"time"
-
-	"github.com/rwcarlsen/goexif/exif"
 )
 
-func ExtractTime(x *exif.Exif) (time.Time, error) {
-	return x.DateTime()
+type ImageSaverInterface interface {
+	SaveImage(file multipart.File, originalName, folder, userID string) error
 }
 
-func IsToday(t time.Time) bool {
-	now := time.Now()
-	return now.Year() == t.Year() && now.YearDay() == t.YearDay()
-}
+type ImageSaver struct{}
 
-func SaveImage(file multipart.File, originalName, folder, userID string) error {
-	timestamp := time.Now().Format(time.RFC3339)
+func (service *ImageSaver) SaveImage(file multipart.File, originalName, folder, userID string) error {
+	timestamp := time.Now().Format("20060102_150405")
 	filename := fmt.Sprintf("%s_%s%s", userID, timestamp, filepath.Ext(originalName))
 	outPath := filepath.Join("storage", folder, filename)
 
