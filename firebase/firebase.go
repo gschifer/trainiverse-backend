@@ -13,7 +13,8 @@ import (
 var AuthClient *auth.Client
 
 type contextKey string
-var keyForUserIds = contextKey("userID")
+
+var keyForUserIDs = contextKey("userID")
 
 func StartFirebase() {
 	opt := option.WithCredentialsFile("firebase/serviceAccountKey.json")
@@ -29,7 +30,7 @@ func StartFirebase() {
 	}
 }
 
-func FirebaseAuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
+func AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		authHeader := r.Header.Get("Authorization")
 		if authHeader == "" {
@@ -44,14 +45,12 @@ func FirebaseAuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		ctx := context.WithValue(r.Context(), keyForUserIds, token.UID)
+		ctx := context.WithValue(r.Context(), keyForUserIDs, token.UID)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	}
 }
-
 
 func GetUserID(r *http.Request) string {
 	userID, _ := r.Context().Value("userID").(string)
 	return userID
 }
-

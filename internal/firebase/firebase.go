@@ -10,7 +10,7 @@ import (
 	"google.golang.org/api/option"
 )
 
-type FirebaseInterface interface {
+type Interface interface {
 	GetUserID(r *http.Request) string
 }
 
@@ -18,7 +18,7 @@ type Authenticator interface {
 	VerifyIDToken(ctx context.Context, idToken string) (*auth.Token, error)
 }
 
-type FirebaseClient struct{}
+type Client struct{}
 
 var Auth Authenticator
 
@@ -42,7 +42,7 @@ func StartFirebase() {
 	Auth = client
 }
 
-func FirebaseAuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
+func AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		authHeader := r.Header.Get("Authorization")
 		if authHeader == "" {
@@ -62,7 +62,7 @@ func FirebaseAuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-func (firebaseService FirebaseClient) GetUserID(r *http.Request) string {
+func (firebaseService Client) GetUserID(r *http.Request) string {
 	userID, _ := r.Context().Value(keyForUserIDs).(string)
 
 	return userID

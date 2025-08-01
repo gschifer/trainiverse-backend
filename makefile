@@ -38,7 +38,7 @@ clean:
 # Need to specify packages for linting too
 lint: install-tools
 	@echo "Running linters (golint and staticcheck)..."
-	golint ./...
+	golangci-lint run -v
 	staticcheck ./...
 
 docker-build:

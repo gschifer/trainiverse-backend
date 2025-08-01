@@ -20,7 +20,7 @@ func NewCheckinRepo(db *sql.DB) interfaces.CheckinInterface {
 	}
 }
 
-func (checkinRepo *CheckinRepository) GetPathImage(userId string) (string, error) {
+func (checkinRepo *CheckinRepository) GetPathImage(userID string) (string, error) {
 	query := `
 		SELECT image_path 
 		FROM checkins 
@@ -29,7 +29,7 @@ func (checkinRepo *CheckinRepository) GetPathImage(userId string) (string, error
 	`
 
 	var imagePath string
-	err := checkinRepo.DB.QueryRow(query, userId).Scan(&imagePath)
+	err := checkinRepo.DB.QueryRow(query, userID).Scan(&imagePath)
 	if err != nil {
 		fmt.Println("Error fetching image path:", err)
 	}
@@ -37,7 +37,7 @@ func (checkinRepo *CheckinRepository) GetPathImage(userId string) (string, error
 	return imagePath, nil
 }
 
-func (checkinRepo *CheckinRepository) GetCheckinDate(userId string) (time.Time, error) {
+func (checkinRepo *CheckinRepository) GetCheckinDate(userID string) (time.Time, error) {
 	query := `
 		SELECT checkin_date 
 		FROM checkins 
@@ -46,7 +46,7 @@ func (checkinRepo *CheckinRepository) GetCheckinDate(userId string) (time.Time, 
 	`
 
 	var checkinDate time.Time
-	err := checkinRepo.DB.QueryRow(query, userId).Scan(&checkinDate)
+	err := checkinRepo.DB.QueryRow(query, userID).Scan(&checkinDate)
 	if err != nil {
 		fmt.Println("Error fetching checkin date:", err)
 	}

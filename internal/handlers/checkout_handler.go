@@ -17,7 +17,7 @@ import (
 type CheckoutService struct {
 	checkinRepo     interfaces.CheckinInterface
 	checkoutRepo    interfaces.CheckoutInterface
-	firebaseService firebase.FirebaseInterface
+	firebaseService firebase.Interface
 	ImageSaver      utils.ImageSaverInterface
 }
 
@@ -26,7 +26,7 @@ func NewCheckoutService(checkinRepo interfaces.CheckinInterface,
 	return &CheckoutService{
 		checkinRepo:     checkinRepo,
 		checkoutRepo:    checkoutRepo,
-		firebaseService: &firebase.FirebaseClient{},
+		firebaseService: &firebase.Client{},
 		ImageSaver:      &utils.ImageSaver{},
 	}
 }

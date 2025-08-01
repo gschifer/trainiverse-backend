@@ -1,0 +1,8 @@
+issues:
+  exclude-dirs:
+    - vendor
+linters:
+  enable:
+    - staticcheck
+    - govet
+    - revive

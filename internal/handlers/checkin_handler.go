@@ -13,7 +13,7 @@ import (
 
 type CheckinService struct {
 	checkinRepo    interfaces.CheckinInterface
-	FirebaseClient firebase.FirebaseInterface
+	FirebaseClient firebase.Interface
 	ExifDecoder    utils.ExifDecoderInterface
 	ImageSaver     utils.ImageSaverInterface
 }
@@ -21,7 +21,7 @@ type CheckinService struct {
 func NewCheckinService(checkinRepo interfaces.CheckinInterface, exifDecoder utils.ExifDecoderInterface) *CheckinService {
 	return &CheckinService{
 		checkinRepo:    checkinRepo,
-		FirebaseClient: &firebase.FirebaseClient{},
+		FirebaseClient: &firebase.Client{},
 		ExifDecoder:    exifDecoder,
 		ImageSaver:     &utils.ImageSaver{},
 	}

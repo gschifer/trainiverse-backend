@@ -9,5 +9,5 @@ type CheckinInterface interface {
 	HasCheckedInToday(userID string) (bool, error)
 	SaveCheckinToDB(data models.CheckinData) error
 	GetPathImage(userID string) (string, error)
-	GetCheckinDate(userId string) (time.Time, error)
+	GetCheckinDate(userID string) (time.Time, error)
 }

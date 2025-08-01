@@ -20,8 +20,8 @@ func main() {
 	checkout := handlers.NewCheckoutService(checkInRepo, checkoutRepo)
 	checkin := handlers.NewCheckinService(checkInRepo, &utils.ExifDecoder{})
 
-	http.HandleFunc("/checkin", firebase.FirebaseAuthMiddleware(checkin.CheckinHandler))
-	http.HandleFunc("/checkout", firebase.FirebaseAuthMiddleware(checkout.CheckoutHandler))
+	http.HandleFunc("/checkin", firebase.AuthMiddleware(checkin.CheckinHandler))
+	http.HandleFunc("/checkout", firebase.AuthMiddleware(checkout.CheckoutHandler))
 
 	port := os.Getenv("PORT")
 	if port == "" {

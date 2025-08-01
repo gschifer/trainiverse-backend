@@ -4,12 +4,14 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/joho/godotenv"
+	// Register PostgreSQL driver via side-effects
 	_ "github.com/lib/pq"
 	"log"
 	"os"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
+	// Register file source driver for golang-migrate via side-effects
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
