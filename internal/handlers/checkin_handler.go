@@ -65,8 +65,6 @@ func (service CheckinService) CheckinHandler(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	println("EXIF data:", x)
-
 	timestamp, err := utils.ExtractTime(x)
 	if err != nil || !utils.IsToday(timestamp) {
 		http.Error(w, `{"error":"photo must be from today"}`, http.StatusBadRequest)

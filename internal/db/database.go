@@ -3,11 +3,10 @@ package database
 import (
 	"database/sql"
 	"fmt"
-	"log"
-	"os"
-
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
+	"log"
+	"os"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
@@ -21,10 +20,6 @@ type DBInterface interface {
 	Prepare(query string) (*sql.Stmt, error)
 }
 
-func GetDB() DBInterface {
-	return DB
-}
-
 var DB *sql.DB
 
 func InitDatabase() {
@@ -32,13 +27,21 @@ func InitDatabase() {
 	if envErr != nil {
 		log.Fatal("Error loading .env file")
 	}
-
 	user := os.Getenv("DB_USER")
 	password := os.Getenv("DB_PASSWORD")
 	dbname := os.Getenv("DB_NAME")
 	sslmode := os.Getenv("DB_SSLMODE")
+	port := os.Getenv("DB_PORT")
 
-	connStr := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=%s", user, password, dbname, sslmode)
+	var dbHost string
+	if os.Getenv("RUNNING_IN_DOCKER") == "true" {
+		dbHost = os.Getenv("DB_HOST_FOR_DOCKER")
+	} else {
+		dbHost = os.Getenv("DB_HOST")
+	}
+
+	connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
+		dbHost, port, user, password, dbname, sslmode)
 
 	var err error
 	DB, err = sql.Open("postgres", connStr)
@@ -46,9 +49,15 @@ func InitDatabase() {
 		log.Fatal("Failed to connect to database:", err)
 	}
 
-	err = DB.Ping()
+	for i := 0; i < 10; i++ {
+		err = DB.Ping()
+		if err == nil {
+			break
+		}
+		log.Println("Waiting for database to be ready...")
+	}
 	if err != nil {
-		log.Fatal("Failed to ping the database:", err)
+		log.Fatal("Failed to connect to database after multiple retries:", err)
 	}
 
 	log.Println("Connected to the database successfully")
