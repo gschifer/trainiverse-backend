@@ -14,7 +14,7 @@ packages:
       CheckinInterface:
   trainiverse-backend/internal/firebase:
     interfaces:
-      FirebaseInterface:
+      Interface:
   trainiverse-backend/internal/utils:
     interfaces:
       ExifDecoderInterface:
