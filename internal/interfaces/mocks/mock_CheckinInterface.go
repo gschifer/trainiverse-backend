@@ -39,8 +39,8 @@ func (_m *MockCheckinInterface) EXPECT() *MockCheckinInterface_Expecter {
 }
 
 // GetCheckinDate provides a mock function for the type MockCheckinInterface
-func (_mock *MockCheckinInterface) GetCheckinDate(userId string) (time.Time, error) {
-	ret := _mock.Called(userId)
+func (_mock *MockCheckinInterface) GetCheckinDate(userID string) (time.Time, error) {
+	ret := _mock.Called(userID)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetCheckinDate")
@@ -49,15 +49,15 @@ func (_mock *MockCheckinInterface) GetCheckinDate(userId string) (time.Time, err
 	var r0 time.Time
 	var r1 error
 	if returnFunc, ok := ret.Get(0).(func(string) (time.Time, error)); ok {
-		return returnFunc(userId)
+		return returnFunc(userID)
 	}
 	if returnFunc, ok := ret.Get(0).(func(string) time.Time); ok {
-		r0 = returnFunc(userId)
+		r0 = returnFunc(userID)
 	} else {
 		r0 = ret.Get(0).(time.Time)
 	}
 	if returnFunc, ok := ret.Get(1).(func(string) error); ok {
-		r1 = returnFunc(userId)
+		r1 = returnFunc(userID)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -70,12 +70,12 @@ type MockCheckinInterface_GetCheckinDate_Call struct {
 }
 
 // GetCheckinDate is a helper method to define mock.On call
-//   - userId string
-func (_e *MockCheckinInterface_Expecter) GetCheckinDate(userId interface{}) *MockCheckinInterface_GetCheckinDate_Call {
-	return &MockCheckinInterface_GetCheckinDate_Call{Call: _e.mock.On("GetCheckinDate", userId)}
+//   - userID string
+func (_e *MockCheckinInterface_Expecter) GetCheckinDate(userID interface{}) *MockCheckinInterface_GetCheckinDate_Call {
+	return &MockCheckinInterface_GetCheckinDate_Call{Call: _e.mock.On("GetCheckinDate", userID)}
 }
 
-func (_c *MockCheckinInterface_GetCheckinDate_Call) Run(run func(userId string)) *MockCheckinInterface_GetCheckinDate_Call {
+func (_c *MockCheckinInterface_GetCheckinDate_Call) Run(run func(userID string)) *MockCheckinInterface_GetCheckinDate_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 string
 		if args[0] != nil {
@@ -93,7 +93,7 @@ func (_c *MockCheckinInterface_GetCheckinDate_Call) Return(time1 time.Time, err 
 	return _c
 }
 
-func (_c *MockCheckinInterface_GetCheckinDate_Call) RunAndReturn(run func(userId string) (time.Time, error)) *MockCheckinInterface_GetCheckinDate_Call {
+func (_c *MockCheckinInterface_GetCheckinDate_Call) RunAndReturn(run func(userID string) (time.Time, error)) *MockCheckinInterface_GetCheckinDate_Call {
 	_c.Call.Return(run)
 	return _c
 }
