@@ -6,9 +6,9 @@ permissions:
 
 on:
   push:
-    branches: [dev, master]
+    branches: [ dev, master ]
   pull_request:
-    branches: [dev, master]
+    branches: [ dev, master ]
 
 jobs:
   pre-build-validations:
@@ -52,6 +52,15 @@ jobs:
         with:
           go-version: 1.24.4
 
+      - name: Clean Go module cache
+        run: go clean -modcache
+
+      - name: Download Go module dependencies
+        run: go mod download
+
+      - name: Build project to verify dependencies
+        run: go build ./...
+
       - name: Install golangci-lint
         run: go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 
@@ -82,7 +91,7 @@ jobs:
   semantic-release:
     name: Semantic Release
     runs-on: ubuntu-latest
-    needs: [lint, pre-build-validations, commitlint]
+    needs: [ lint, pre-build-validations, commitlint ]
     if: github.ref == 'refs/heads/dev'
     permissions:
       contents: write
