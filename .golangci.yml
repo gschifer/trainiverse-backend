@@ -7,9 +7,5 @@ linters:
 issues:
   exclude-dirs:
     - vendor
-
-run:
-  skip-dirs:
-    - vendor
-  skip-files:
+  exclude-files:
     - "mock_.*\\.go"
