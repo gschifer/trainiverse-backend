@@ -55,8 +55,11 @@ jobs:
       - name: Clean Go module cache
         run: go clean -modcache
 
-      - name: Download Go module dependencies
-        run: go mod download
+      - name: Tidy Go modules
+        run: go mod tidy
+
+      - name: Vendor Go modules
+        run: go mod vendor
 
       - name: Build project to verify dependencies
         env:
