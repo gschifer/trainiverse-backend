@@ -59,7 +59,9 @@ jobs:
         run: go mod download
 
       - name: Build project to verify dependencies
-        run: go build -mod=vendor ./...
+        env:
+          GOFLAGS: "-mod=mod"
+        run: go build ./...
 
       - name: Install golangci-lint
         run: go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
