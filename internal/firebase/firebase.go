@@ -7,7 +7,6 @@ import (
 
 	firebase "firebase.google.com/go/v4"
 	"firebase.google.com/go/v4/auth"
-	_ "firebase.google.com/go/v4/storage"
 	"google.golang.org/api/option"
 )
 
