@@ -1,8 +1,15 @@
-issues:
-  exclude-dirs:
-    - vendor
 linters:
   enable:
     - staticcheck
     - govet
     - revive
+
+issues:
+  exclude-dirs:
+    - vendor
+
+run:
+  skip-dirs:
+    - vendor
+  skip-files:
+    - "mock_.*\\.go"
