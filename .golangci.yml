@@ -1,0 +1,11 @@
+linters:
+  enable:
+    - staticcheck
+    - govet
+    - revive
+
+issues:
+  exclude-dirs:
+    - vendor
+  exclude-files:
+    - "mock_.*\\.go"

@@ -1,0 +1,22 @@
+all: false
+dir: '{{.InterfaceDir}}/mocks'
+filename: "mock_{{.InterfaceName}}.go"
+log-level: info
+structname: "Mock{{.InterfaceName}}"
+recursive: false
+
+packages:
+  trainiverse-backend/internal/db:
+    interfaces:
+      DBInterface:
+  trainiverse-backend/internal/interfaces:
+    interfaces:
+      CheckinInterface:
+      CheckoutInterface:
+  trainiverse-backend/internal/firebase:
+    interfaces:
+      Interface:
+  trainiverse-backend/internal/utils:
+    interfaces:
+      ExifDecoderInterface:
+      ImageSaverInterface:
