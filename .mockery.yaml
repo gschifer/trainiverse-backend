@@ -12,6 +12,7 @@ packages:
   trainiverse-backend/internal/interfaces:
     interfaces:
       CheckinInterface:
+      CheckoutInterface:
   trainiverse-backend/internal/firebase:
     interfaces:
       Interface:

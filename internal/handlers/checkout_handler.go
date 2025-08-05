@@ -10,23 +10,23 @@ import (
 	"trainiverse-backend/models"
 
 	"trainiverse-backend/internal/utils"
-
-	"github.com/rwcarlsen/goexif/exif"
 )
 
 type CheckoutService struct {
 	checkinRepo     interfaces.CheckinInterface
 	checkoutRepo    interfaces.CheckoutInterface
 	firebaseService firebase.Interface
+	ExifDecoder     utils.ExifDecoderInterface
 	ImageSaver      utils.ImageSaverInterface
 }
 
 func NewCheckoutService(checkinRepo interfaces.CheckinInterface,
-	checkoutRepo interfaces.CheckoutInterface) *CheckoutService {
+	checkoutRepo interfaces.CheckoutInterface, exifDecoder utils.ExifDecoderInterface) *CheckoutService {
 	return &CheckoutService{
 		checkinRepo:     checkinRepo,
 		checkoutRepo:    checkoutRepo,
 		firebaseService: &firebase.Client{},
+		ExifDecoder:     exifDecoder,
 		ImageSaver:      &utils.ImageSaver{},
 	}
 }
@@ -66,7 +66,7 @@ func (service *CheckoutService) CheckoutHandler(w http.ResponseWriter, r *http.R
 		}
 	}()
 
-	x, err := exif.Decode(file)
+	x, err := service.ExifDecoder.Decode(file)
 	if err != nil {
 		http.Error(w, `{"error":"could not read EXIF"}`, http.StatusInternalServerError)
 		return
@@ -81,9 +81,11 @@ func (service *CheckoutService) CheckoutHandler(w http.ResponseWriter, r *http.R
 	ok, err := service.checkinRepo.HasCheckedInToday(userID)
 	if err != nil {
 		http.Error(w, `{"error":"failed to check in the database"}`, http.StatusInternalServerError)
+		return
 	}
 	if !ok {
 		http.Error(w, `{"error":"user has not checked in today"}`, http.StatusBadRequest)
+		return
 	}
 
 	checkinDateTime, _ := service.checkinRepo.GetCheckinDate(userID)
@@ -119,10 +121,9 @@ func (service *CheckoutService) CheckoutHandler(w http.ResponseWriter, r *http.R
 		return
 	}
 
+	w.WriteHeader(http.StatusCreated)
 	_ = json.NewEncoder(w).Encode(map[string]any{
-		"message": "Check-out saved successfully",
-		// "checkin_at":  start,
+		"message":     "Check-out saved successfully",
 		"checkout_at": checkoutDateTime,
-		// "duration":    checkoutDateTime.Sub(start).String(),
 	})
 }
