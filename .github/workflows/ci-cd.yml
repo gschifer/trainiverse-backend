@@ -72,6 +72,32 @@ jobs:
       - name: Run golangci-lint
         run: golangci-lint run -v
 
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24.4'
+
+      - name: Run tests and generate coverage report
+        run: |
+          go test ./... -coverprofile=coverage.out
+          go tool cover -html=coverage.out -o coverage.html
+
+      - name: Debug workspace
+        run: ls -la
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage.out
+
   commitlint:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
