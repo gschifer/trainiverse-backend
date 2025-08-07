@@ -84,6 +84,17 @@ jobs:
         with:
           go-version: '1.24.4'
 
+      - name: Tidy Go modules
+        run: go mod tidy
+
+      - name: Vendor Go modules
+        run: go mod vendor
+
+      - name: Build project to verify dependencies
+        env:
+          GOFLAGS: "-mod=mod"
+        run: go build ./...
+
       - name: Run tests and generate coverage report
         run: |
           go test ./... -coverprofile=coverage.out
